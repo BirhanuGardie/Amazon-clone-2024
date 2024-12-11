@@ -30,7 +30,12 @@ function ProductDetail() {
       {isLoading ? (
         <Loader />
       ) : (
-        product && <ProductCard product={product} flex={true} renderDesc={true} /> // Render only if product exists
+        product && <ProductCard 
+        product={product} 
+        flex={true} 
+        renderDesc={true} 
+        renderAdd={true}
+        /> // Render only if product exists
       )}
     </Layout>
   );

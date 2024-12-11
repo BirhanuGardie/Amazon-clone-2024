@@ -32,7 +32,11 @@ function Product() {
       ) : (
         <section className={classes.products__container}>
           {products.map((singleProduct) => (
-            <ProductCard product={singleProduct} key={singleProduct.id} />
+            <ProductCard 
+            renderAdd={true}
+            product={singleProduct} 
+            key={singleProduct.id} 
+            />
           ))}
         </section>
       )}
