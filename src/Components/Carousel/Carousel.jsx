@@ -3,6 +3,7 @@ import {Carousel} from 'react-responsive-carousel'
 import {img} from './img/data'
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import classes from './Carousel.module.css'
+import { ImageList } from '@mui/material';
 
 function CarouselEffect() {
   return (
@@ -18,7 +19,7 @@ function CarouselEffect() {
     >
         {
             img.map((imageItemLink)=>{
-                return <img src = {imageItemLink} />
+                return <img key={imageItemLink} src = {imageItemLink} />
             })
         }
 
