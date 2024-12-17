@@ -1,44 +1,62 @@
 import React, { useState, useContext } from "react";
 import classes from "./SignUp.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../Utility/firebase";
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword } 
 from 'firebase/auth'
+import {ClipLoader} from 'react-spinners'
 import { DataContext } from "../../Components/DataProvider/DataProvider";
 
 function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading]= useState({
+    signIn:false,
+    signUp:false
+
+  })
+
+
   const [{user}, dispatch] = useContext(DataContext)
-  console.log(user);
+  const navigate = useNavigate();
+ 
  
   const authHandler =async(e)=>{
     e.preventDefault();
     console.log(e.target.name);
     if(e.target.name == "signin"){
+
 // firebase auth
+setLoading({...loading, signIn:true})
 signInWithEmailAndPassword(auth, email, password).then((userInfo)=>{
   
   dispatch({
     type:Type.SET_USER,
     user:userInfo.user
   })
+  setLoading({...loading, signIn:false})
+  navigate("/");
 }).catch((err)=>{
-  console.log(err);
+  setError(err.message);
+  setLoading({...loading, signIn:false})
 })
 
 
     }
     else{
+      setLoading({...loading, signUp:true})
       createUserWithEmailAndPassword(auth, email,password).then((userInfo)=>{
-       
+      
         dispatch({
           type:Type.SET_USER,
           user:userInfo.user
         });
+        setLoading({...loading, signUp:false})
+        navigate("/");
       }).catch((err)=>{
-        console.log(err);
+        setError(err.message);
+        setLoading({...loading, signUp:false})
       })
 
     }
@@ -46,7 +64,7 @@ signInWithEmailAndPassword(auth, email, password).then((userInfo)=>{
 
   return (
     <section className={classes.login}>
-      <Link>
+      <Link to ={"/"}>
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/603px-Amazon_logo.svg.png"
           alt=""
@@ -73,7 +91,13 @@ signInWithEmailAndPassword(auth, email, password).then((userInfo)=>{
               id="password"
             />
           </div>
-          <button type="submit" onClick={authHandler} name="signin" className={classes.login__signInButton}>Sign In</button>
+          <button type="submit" onClick={authHandler} name="signin" className={classes.login__signInButton}>
+            {loading.signIn ? (
+              <ClipLoader color="#000" size={15}></ClipLoader>
+            ) : (
+              "Sign In"
+            )}
+           </button>
         </form>
         <p>
           By signing-in you agree to the Amazon fake clone conditions of use &
@@ -81,8 +105,16 @@ signInWithEmailAndPassword(auth, email, password).then((userInfo)=>{
           Interest-Based Ads Notice.
         </p>
         <button type="submit" onClick={authHandler} name="signup" className={classes.login__registerButton}>
-          Create your Amazon Account
+        {loading.signUp ? (
+              <ClipLoader color="#000" size={15}></ClipLoader>
+            ) : (
+              "Create your Amazon Account"
+            )}
+          
         </button>
+        {
+          error && <small style={{paddingTop:"5px",color:"red"}}>{error} </small>
+        }
       </div>
     </section>
   );

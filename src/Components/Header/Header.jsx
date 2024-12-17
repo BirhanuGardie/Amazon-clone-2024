@@ -6,9 +6,10 @@ import { SlLocationPin } from "react-icons/sl";
 import { BsSearch } from "react-icons/bs";
 import LowerHeader from "./LowerHeader.jsx";
 import { DataContext } from "../DataProvider/DataProvider.jsx";
+import {auth} from '../../Utility/firebase.js'
 
 function Header() {
-  const [{basket}, dispatch]=useContext(DataContext)
+  const [{user,basket}, dispatch]=useContext(DataContext)
   const totalItem= basket?.reduce((amount, item)=>{
     return item.amount + amount
   },0)
@@ -47,9 +48,27 @@ function Header() {
                     <option value="">EN</option>
                 </select>
                 </Link>
-            <Link to="">
-                    <p>Sign In</p>
-                    <span>Account and lists</span>
+            <Link to={!user && "/auth"}>
+            <div>
+              {
+                user ? (
+                  <>
+                  <p>Hello {user?.email?.split("@")[0]} </p>
+                  <span onClick={()=>auth.signOut()} >Sign Out</span>
+                  </>
+                ):(
+                  <>
+                   <p>Hello, Sign In</p>
+                   <span>Account and lists</span>
+                  </>
+                 
+                )
+                }
+            
+
+            </div>
+                    
+                    
                            </Link>
             <Link to="/orders">
                 <p>returns</p>
