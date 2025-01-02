@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import classes from "./SignUp.module.css";
+import classes from "./signUp.module.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { auth } from "../../Utility/firebase";
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword } 
@@ -25,11 +25,12 @@ function Auth() {
  
   const authHandler =async(e)=>{
     e.preventDefault();
-    console.log(e.target.name);
+    // console.log(e.target.name);
     if(e.target.name == "signin"){
 
 // firebase auth
 setLoading({...loading, signIn:true})
+
 signInWithEmailAndPassword(auth, email, password).then((userInfo)=>{
   
   dispatch({
